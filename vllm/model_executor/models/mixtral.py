@@ -183,12 +183,14 @@ class MixtralAttention(nn.Module):
             self.total_num_kv_heads,
             bias=False,
             linear_method=linear_method,
+            params_dtype=torch.bfloat16
         )
         self.o_proj = RowParallelLinear(
             self.total_num_heads * self.head_dim,
             hidden_size,
             bias=False,
             linear_method=linear_method,
+            params_dtype=torch.bfloat16
         )
         self.rotary_emb = get_rope(
             self.head_dim,
