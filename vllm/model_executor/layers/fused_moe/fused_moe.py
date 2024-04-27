@@ -327,8 +327,21 @@ def fused_moe(
     routing_weights = torch.softmax(gating_output,
                                     dim=-1,
                                     dtype=torch.float32)
+
+    
+    #####################################################################################
     # Below will return worstk
+    #####################################################################################
     topk_weights, topk_ids = torch.topk(routing_weights, topk, dim=-1, largest=False)
+    #####################################################################################
+
+    #####################################################################################
+    # Uncomment below code to run random-k 
+    #####################################################################################
+    # device = routing_weights.device
+    # topk_ids = torch.randint(high=routing_weights.shape[-1], size=(routing_weights.size(0), topk), dtype=torch.long, device=device)
+    # topk_weights = torch.gather(routing_weights, -1, topk_ids)
+    #####################################################################################
 
     if renormalize:
         topk_weights = topk_weights / topk_weights.sum(dim=-1, keepdim=True)
